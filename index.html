@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<style>
+		.loader-label {
+			 vertical-align: top;
+			 letter-spacing: 0.1px;
+			 font-size: 18px;
+			 padding: 16px 0px;
+			 color: #003f5c;
+		}
+		.show-loader {
+			border:2px solid #cecece;
+			border-top: 2px solid #F9AA33;
+			width: 28px;
+			height: 28px;
+			border-radius: 50%;
+			animation: spinner 0.7s infinite linear;
+			margin: 0 auto;
+		}
+
+		@keyframes spinner {
+			0%{
+				transform:rotate(0deg);
+			}
+			100%{
+				transform:rotate(360deg);
+			}
+		}
+		.overlay {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			background-color: #000000;
+			opacity:0.4;
+			z-index:1;
+			top:0;
+			left:0;
+			right:0;
+			bottom:0;
+		}
+		.loader-wrapper {
+			text-align: center;
+			position: fixed;
+			top:50%;
+			left:50%;
+			transform: translate(-50%,-50%);
+			z-index:2;
+		}
+		.filters
+		{
+			margin-top:60px;
+				margin-bottom:40px;
+		}
+		.filters input{
+			border-radius:6px;
+			margin-right: 10px;
+			outline: none;
+      padding-left: 4px;
+		}
+		.details
+		{
+			margin-top:20px;
+		}
+		.allign{
+		text-align: center;
+		}
+	</style>
+
+</head>
+
+<body ng-app="myApp">
+
+	<div  class="container">
+		<div ng-controller="myCtrl" ng-init="onLoad()">
+			<div ng-show="showLoader" class="overlay"></div>
+		<div class="col-sm-12 filters" ng-show="filmDetailsFlag">
+			<label>Name</label>
+			<input  type="text" ng-model="search.name">
+			<label>Birth Year</label>
+			<input type="text"  ng-model="search.birth_year">
+			<label>Gender</label>
+			<input type="text" ng-model="search.gender">
+			<label>Films</label>
+			<input type="text" ng-model="search.films.title">
+		</div>
+		<div ng-show="showLoader" class="loader-wrapper">
+			<div class="loader-label">Please wait... fetching details...</div>
+			<div class="show-loader"></div>
+		</div>
+
+		<div>
+        <table class="table table-striped details">
+					<thead  ng-show="filmDetailsFlag">
+						<th>Name</th>
+						<th>Birth Year</th>
+						<th>Gender</th>
+						<th>Films</th>
+
+						<thead>
+							<tbody ng-show="filmDetailsFlag">
+          <tr ng-repeat="(key,value) in filmDetails  | filter:search" >
+            <td data-title="Name" style="width:15%;">{{value.name}}</td>
+            <td style="width:15%;">{{value.birth_year}}</td>
+						 <td style="width:15%">{{value.gender}}</td>
+
+						 <td style="width:55%;">
+							 <div style="width:100%;height:50px;overflow-y:scroll;">
+								 <div ng-repeat-start="(childIndex,otherFilmDetails) in value.films ">
+									 <span> {{ otherFilmDetails.title }}</span>
+								</div>
+								<div ng-repeat-end></div>
+							 </div>
+
+						</td>
+
+
+          </tr>
+				</tbody>
+        </table>
+			</div>
+			<div class="allign" ng-show="filmDetailsFlag">
+				<button class="btn btn-default" ng-disabled="prePage" data-ng-click="previousPage(det.previous)" ><<</button>
+				<button class="btn btn-default" data-ng-click="nextPage(det.next)">>></button>
+			</div>
+				</div>
+			</div>
+
+</body>
+
+<script src="coviaminterview.js"></script>
+</html>
